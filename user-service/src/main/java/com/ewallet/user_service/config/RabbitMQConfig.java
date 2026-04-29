@@ -3,6 +3,8 @@ package com.ewallet.user_service.config;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,7 +25,7 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding userRegisteredBinding(Queue userRegisteredQueue,DirectExchange ewalletExchange){
+    public Binding userRegisteredBinding(Queue userRegisteredQueue, DirectExchange ewalletExchange) {
 
         return BindingBuilder
                 .bind(userRegisteredQueue)
@@ -32,8 +34,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory){
-        return new RabbitTemplate(connectionFactory);
+    public MessageConverter jsonMessageConverter() {
+        return new JacksonJsonMessageConverter();
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
+                                         MessageConverter messageConverter) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(messageConverter);
+        return template;
     }
 
 }

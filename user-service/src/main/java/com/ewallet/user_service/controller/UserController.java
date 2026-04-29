@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -24,13 +25,15 @@ public class UserController {
         return ResponseEntity.ok("User Service is running");
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody UserProfile profile) {
-        if (userProfileRepository.existsByEmail(profile.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Email already in use");
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
+        Optional<UserProfile> user = userProfileRepository.findByUserId(userId);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(404).body("User not found");
         }
-        return ResponseEntity.ok(userService.createUser(profile));
     }
 
     @GetMapping("/{id}")
@@ -45,17 +48,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllUsers(@RequestHeader(value = "X-User-Role", required = false) String role) {
-        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
-            return ResponseEntity.status(403).body("Admin Access only");
-        }
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
     @PatchMapping("/{id}")
     public ResponseEntity<UserProfile> updateUser(@PathVariable Long id,@RequestBody UserProfile profile){
-        return ResponseEntity.ok(userService.updateUser(id, profile.getEmail()));
+        return ResponseEntity.ok(userService.updateUser(id, profile.getEmail(),profile.getPhoneNumber()));
     }
 
     @GetMapping("/me")

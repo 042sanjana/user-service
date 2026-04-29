@@ -1,6 +1,5 @@
 package com.ewallet.user_service.service;
 import com.ewallet.user_service.config.RabbitMQConfig;
-import com.ewallet.user_service.event.UserRegisteredEvent;
 import com.ewallet.user_service.entity.UserProfile;
 import com.ewallet.user_service.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -38,8 +39,8 @@ public class UserService {
         if (updatedData.getFullName() != null) {
             existing.setFullName(updatedData.getFullName());
         }
-        if (updatedData.getPhone() != null) {
-            existing.setPhone(updatedData.getPhone());
+        if (updatedData.getPhoneNumber() != null) {
+            existing.setPhoneNumber(updatedData.getPhoneNumber());
         }
         return userProfileRepository.save(existing);
     }
@@ -48,9 +49,10 @@ public class UserService {
         userProfileRepository.deleteByemail(email);
     }
 
-    public UserProfile updateUser(Long id, String email) {
+    public UserProfile updateUser(Long id, String email, BigDecimal phoneNumber) {
         UserProfile user = userProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found" + id));
         user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
         return userProfileRepository.save(user);
     }
 
@@ -61,4 +63,6 @@ public class UserService {
     public void deleteUser(Long id) {
         userProfileRepository.deleteById(id);
     }
+
+
 }

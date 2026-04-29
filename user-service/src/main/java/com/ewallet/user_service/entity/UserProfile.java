@@ -2,7 +2,10 @@
 package com.ewallet.user_service.entity;
 import jakarta.persistence.*;
         import lombok.*;
-        import java.time.LocalDateTime;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
@@ -18,10 +21,11 @@ public class UserProfile {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    private Long userId;
     private String email;
-
-    private String phone;
     private String fullName;
+    private BigDecimal phoneNumber;
+    private Date dateOfBirth;
 
     @Column(updatable = false )
     private LocalDateTime createdAt;
