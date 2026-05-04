@@ -30,21 +30,6 @@ public class UserService {
         return userProfileRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
     }
 
-
-    public UserProfile updateUser(Long id, UserProfile updatedData) {
-        UserProfile existing = getUser(id);
-        if (updatedData.getEmail() != null) {
-            existing.setEmail(updatedData.getEmail());
-        }
-        if (updatedData.getFullName() != null) {
-            existing.setFullName(updatedData.getFullName());
-        }
-        if (updatedData.getPhoneNumber() != null) {
-            existing.setPhoneNumber(updatedData.getPhoneNumber());
-        }
-        return userProfileRepository.save(existing);
-    }
-
     public void deleteByEmail(String email){
         userProfileRepository.deleteByemail(email);
     }

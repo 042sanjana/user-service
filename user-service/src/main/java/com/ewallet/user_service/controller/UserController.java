@@ -48,7 +48,7 @@ public class UserController {
     }
 
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<UserProfile> updateUser(@PathVariable Long id,@RequestBody UserProfile profile){
         return ResponseEntity.ok(userService.updateUser(id, profile.getEmail(),profile.getPhoneNumber()));
     }
