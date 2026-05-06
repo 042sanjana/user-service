@@ -4,6 +4,7 @@ import com.ewallet.user_service.entity.UserProfile;
 import com.ewallet.user_service.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,10 @@ public class UserService {
        UserProfile saved=userProfileRepository.save(profile);
         return saved;
     }
+
+
+
+
 
     public UserProfile getUser(Long id){
         return userProfileRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));

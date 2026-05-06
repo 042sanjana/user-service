@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:3003")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -30,7 +31,7 @@ public class UserController {
         Optional<UserProfile> user = userProfileRepository.findByUserId(userId);
 
         if (user.isPresent()) {
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(user.get());
         } else {
             return ResponseEntity.status(404).body("User not found");
         }
