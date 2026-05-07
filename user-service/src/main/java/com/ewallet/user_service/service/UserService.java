@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,8 @@ public class UserService {
 
 
 
-    public UserProfile getUser(Long id){
-        return userProfileRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+    public Optional<UserProfile> getUser(Long id){
+        return userProfileRepository.findByUserId(id);
     }
 
     public void deleteByEmail(String email){

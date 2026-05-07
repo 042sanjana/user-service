@@ -4,7 +4,6 @@ import com.ewallet.user_service.entity.UserProfile;
 import com.ewallet.user_service.repository.UserProfileRepository;
 import com.ewallet.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:3003")
+
 @RequiredArgsConstructor
 public class UserController {
 
@@ -26,8 +25,8 @@ public class UserController {
         return ResponseEntity.ok("User Service is running");
     }
 
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile(@RequestHeader("X-User-Id")Long userId) {
         Optional<UserProfile> user = userProfileRepository.findByUserId(userId);
 
         if (user.isPresent()) {
@@ -35,11 +34,6 @@ public class UserController {
         } else {
             return ResponseEntity.status(404).body("User not found");
         }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserProfile> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @DeleteMapping("/{id}")
@@ -54,9 +48,4 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, profile.getEmail(),profile.getPhoneNumber()));
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<String> whoAMI(
-            @RequestHeader("X-User-Id") String userId){
-        return ResponseEntity.ok("Logged in as :"+userId);
-    }
 }
