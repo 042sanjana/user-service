@@ -28,10 +28,6 @@ public class UserService {
         return saved;
     }
 
-
-
-
-
     public Optional<UserProfile> getUser(Long id){
         return userProfileRepository.findByUserId(id);
     }
